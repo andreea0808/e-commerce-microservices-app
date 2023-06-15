@@ -1,0 +1,49 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+server:
+  port: 8882
+
+spring:
+  application:
+    name: email-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: email-service
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.json.trusted.packages: '*'
+    topic:
+      name: notification-topic
+  mail:
+    username: ${gmail-username}
+    password: ${gmail-password}
+    customer: ${mail-customer}
+  zipkin:
+    base-url: http://localhost:9411
+
+actuator:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
